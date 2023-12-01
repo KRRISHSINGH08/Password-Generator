@@ -18,15 +18,24 @@ const symbols = '!"#$%&()*+,-./:;<=>?@[^]_`{|}~';
 let password = "";
 let passwordLength = 10;
 let checkCount = 0;
+setIndicator("#ccc")
 handleSlider();
 
 function handleSlider() {
   slider.value = passwordLength;
   lengthDisplay.innerText = passwordLength;
+
+// background color of slider will be till thumb element
+const min = slider.min;
+const max = slider.max;
+// finding width and height of slider background image
+slider.style.backgroundSize = ((passwordLength - min) * 100 / (max-min)) + "% 100%";
 }
 
 function setIndicator(color) {
   indicator.style.backgroundColor = color;
+//   shadow 
+  indicator.style.boxShadow =  `0px 0px 12px 1px ${color}`;
 }
 
 function getRandInteger(min, max) {
@@ -62,13 +71,13 @@ function calcStrength() {
    if(symbolsCheck.checked) hasSymbols = true;
 
     if((hasUpper || hasLower) && hasNumbers && hasSymbols && passwordLength >= 8) {
-        setIndicator("0f0"); // strong
+        setIndicator("#0f0"); // strong
     }
     else if((hasUpper || hasLower) && (hasNumbers || hasSymbols) && passwordLength >= 6) {
-        setIndicator("ff0"); // medium
+        setIndicator("#ff0"); // medium
     }
     else {
-        setIndicator("f00"); // weak
+        setIndicator("#f00"); // weak
     }
 }
 
@@ -120,13 +129,16 @@ allCheckBox.forEach((checkBox) => {
 })
 
 function shufflePassword(array) {
-    // Fisher Yates Method
+    // Fisher Yates Method 
     for(let i = array.length - 1; i > 0; i--) {
+        // 1. Find random j.
         const j = Math.floor(Math.random() * (i+1));
+        // 2. swap number at i and j index
         const temp = array[i];
         array[i] = array[j];
         array[j] = temp;
     }
+    // return new password as string
     let str = "";
     array.forEach((el) => {str += el});
     return str;
